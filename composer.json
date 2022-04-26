@@ -1,0 +1,21 @@
+{
+    "name": "ak-47/task-manager",
+    "description": "A Simple Todo List Project (With Ajax , PHP , mysql)",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ak47\\TaskManager\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "armankarami.job",
+            "email": "armankarami.job@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "hekmatinasser/verta": "^2.1"
+    }
+}
