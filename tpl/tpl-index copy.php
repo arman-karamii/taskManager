@@ -11,7 +11,10 @@
 <div class="page">
   <div class="pageHeader">
     <div class="title">Dashboard</div>
-    <div class="userPanel"><i class="fa fa-chevron-down"></i><span class="username">John Doe </span><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKl9MVn6d6SPxi2nMUKiJbLd5lc-hkYrKA_2P4WtFBNpq_PO-lAq8inNTfseixN-J0-aU&usqp=CAU" width="40" height="40"/></div>
+    <div class="userPanel">
+    <a href="<?=site_url("?logout=1")?>"><i class="fa fa-sign-out"></i></a>
+    <span class="username"><?=$user->name ?? 'Unknown';?></span>
+    <img src="<?=$user->image;?>" width="40" height="40"/></div>
   </div>
   <div class="main">
     <div class="nav">
@@ -28,8 +31,8 @@
           </li>
 
           <?php foreach ($folders as $folder): ?>
-          <li class="<?=(isset($_GET['folder_id']) and $_GET['folder_id'] == $folder->id) ? 'active' : ''?>">
-          <a href="?folder_id=<?=$folder->id?>"><i class="fa fa-folder"></i><?=$folder->name?></a>
+          <li class="<?=($_GET['folder_id'] == $folder->id) ? 'active' : ''?>">
+          <a href="<?=site_url("?folder_id=$folder->id")?>"><i class="fa fa-folder"></i><?=$folder->name?></a>
           <a href="?delete_folder=<?=$folder->id?>" class="remove"  onclick="return confirm('Are You Sure to delete this Item?\n<?=$folder->name?>');">x</a>
           </li>
           <?php endforeach;?>
@@ -76,7 +79,8 @@
     </div>
   </div>
 </div>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
   <script  src="assets/js/script.js"></script>
   <script>
     $(document).ready(function(){
@@ -84,7 +88,7 @@
       $('.isDone').click(function(e){
           var tid = $(this).attr('data-taskId');
           $.ajax({
-            url : "proccess/ajaxHandler.php",
+            url : "process/ajaxHandler.php",
             method : "post",
             data : {action: "doneSwitch",taskId : tid},
             success : function(response){
@@ -96,12 +100,12 @@
       $('#addFolderBtn').click(function(e){
           var input = $('input#addFolderInput');
           $.ajax({
-            url : "proccess/ajaxHandler.php",
+            url : "process/ajaxHandler.php",
             method : "post",
             data : {action: "addFolder",folderName: input.val()},
             success : function(response){
-              if($.isNumeric(response)){
-                $('<li class=""><a href="?folder_id='+response+'"><i class="fa fa-folder"></i>'+input.val()+'</a><a href="?delete_folder='+response+'" class="remove" onclick="return confirm("Are You Sure to delete this Item?\n'+input.val()+'");">x</a></li>').appendTo('ul.folder-list');
+              if(response == '1'){
+                $('<li> <a href="#"><i class="fa fa-folder"></i>'+input.val()+'</a></li>').appendTo('ul.folder-list');
               }else{
                 alert(response);
               }
@@ -113,11 +117,11 @@
           e.stopPropagation();
           if(e.which == 13) {
               $.ajax({
-                url : "proccess/ajaxHandler.php",
+                url : "process/ajaxHandler.php",
                 method : "post",
                 data : {action: "addTask",folderId : <?=$_GET['folder_id'] ?? 0?> ,taskTitle: $('#taskNameInput').val()},
                 success : function(response){
-                  if($.isNumeric(response)){
+                  if(response == '1'){
                     location.reload();
                   }else{
                     alert(response);
