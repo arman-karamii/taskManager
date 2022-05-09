@@ -1,21 +1,30 @@
 <?php
-
 include "bootstrap/init.php";
 
+if (isset($_GET['logout'])) {
+    logout();
+}
+
+if (!isLoggedIn()) {
+    // redirect to aut form
+    header("Location: " . site_url('auth.php'));
+}
+# user is LoggedIn
+$user = getLoggedInUser();
+
 if (isset($_GET['delete_folder']) && is_numeric($_GET['delete_folder'])) {
-    $deletedCountFolders = deleteFolder($_GET['delete_folder']);
-    // echo "$deletedCount folders successfully deleted ";
+    $deletedCount = deleteFolder($_GET['delete_folder']);
+    // echo "$deletedCount folders succesfully deleted!";
 }
+
 if (isset($_GET['delete_task']) && is_numeric($_GET['delete_task'])) {
-    $deletedCountTasks = deleteTask($_GET['delete_task']);
-    // echo "$deletedCountTasks tasks successfully deleted ";
+    $deletedCount = deleteTask($_GET['delete_task']);
+    // echo "$deletedCount Tasks succesfully deleted!";
 }
-//connetct to db and get tasks
+
+# connect to db and get tasks
 $folders = getFolders();
+
 $tasks = getTasks();
 
-// dd(getTasks());
-
-include "tpl/tpl-index.php"
-
-?>
+include "tpl/tpl-index.php";

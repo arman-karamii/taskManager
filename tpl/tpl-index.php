@@ -11,7 +11,10 @@
 <div class="page">
   <div class="pageHeader">
     <div class="title">Dashboard</div>
-    <div class="userPanel"><i class="fa fa-chevron-down"></i><span class="username">John Doe </span><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKl9MVn6d6SPxi2nMUKiJbLd5lc-hkYrKA_2P4WtFBNpq_PO-lAq8inNTfseixN-J0-aU&usqp=CAU" width="40" height="40"/></div>
+    <div class="userPanel">
+    <a href="<?=site_url("?logout=1")?>"><i class="fa fa-sign-out"></i></a>
+    <span class="username"><?=$user->name ?? 'Unknown';?></span>
+    <img src="<?=$user->image;?>" width="40" height="40"/></div>
   </div>
   <div class="main">
     <div class="nav">
@@ -76,7 +79,8 @@
     </div>
   </div>
 </div>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
   <script  src="assets/js/script.js"></script>
   <script>
     $(document).ready(function(){
@@ -86,7 +90,7 @@
           $.ajax({
             url : "proccess/ajaxHandler.php",
             method : "post",
-            data : {action: "doneSwitch",taskId : tid},
+            data : {action: "doneSwitch",taskId: tid},
             success : function(response){
                 location.reload();
             }

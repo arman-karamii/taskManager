@@ -10,6 +10,7 @@ function deleteFolder($folder_id)
     $stmt->execute();
     return $stmt->rowCount();
 }
+
 function addFolder($folder_name)
 {
     global $pdo;
@@ -31,8 +32,7 @@ function getFolders()
     return $records;
 }
 
-/*** Tasks Functions ***/
-
+/*** Tasks Function ***/
 function deleteTask($task_id)
 {
     global $pdo;
@@ -41,6 +41,7 @@ function deleteTask($task_id)
     $stmt->execute();
     return $stmt->rowCount();
 }
+
 function addTask($taskTitle, $folderId)
 {
     global $pdo;
@@ -50,6 +51,7 @@ function addTask($taskTitle, $folderId)
     $stmt->execute([':title' => $taskTitle, ':user_id' => $current_user_id, ':folder_id' => $folderId]);
     return $pdo->lastInsertId();
 }
+
 function getTasks()
 {
     global $pdo;
@@ -58,10 +60,20 @@ function getTasks()
     if (isset($folder) and is_numeric($folder)) {
         $folderCondition = " AND folder_id = $folder ";
     }
+
     $current_user_id = getCurrentUserId();
     $sql = "SELECT * FROM `tasks` WHERE user_id = $current_user_id $folderCondition";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $records = $stmt->fetchAll(PDO::FETCH_OBJ);
     return $records;
+}
+function doneSwith($task_id)
+{
+    global $pdo;
+    $current_user_id = getCurrentUserId();
+    $sql = "Update `tasks` set is_done = 1 - is_done where user_id = :userID and id = :taskID";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':taskID' => $task_id, ':userID' => $current_user_id]);
+    return $stmt->rowCount();
 }
